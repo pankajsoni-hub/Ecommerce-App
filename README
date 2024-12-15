@@ -1,0 +1,12 @@
+---In terminal---
+cd frontend 
+npm run start
+cd backend 
+node server.js
+
+---basic----
+in sendOrderConfirmation in utils add gmail and app pasword
+
+
+---mongodb---
+install mongo db and start mongodb server

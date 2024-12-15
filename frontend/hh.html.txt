@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS Player</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@0.14.19/dist/hls.min.js"></script>
+</head>
+<body>
+  <video id="video" controls width="100%" height="auto"></video>
+
+  <script>
+    var video = document.getElementById('video');
+    var videoUrl = 'http://localhost:3000/hls/1/master.m3u8';  // URL to your HLS stream
+
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(videoUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoUrl;
+      video.addEventListener('canplay', function() {
+        video.play();
+      });
+    } else {
+      console.error('Your browser does not support HLS');
+    }
+  </script>
+</body>
+</html>
