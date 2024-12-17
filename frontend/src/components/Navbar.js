@@ -1,5 +1,6 @@
 import React from "react";
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from "@mui/styles";
+import { Link } from "react-router-dom"; // Import Link
 import PersonIcon from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -11,22 +12,22 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "10px 20px",
-    backgroundColor: "#e6ccff", 
+    backgroundColor: "#e6ccff",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     fontFamily: "Arial, sans-serif",
   },
   iconWrapper: {
     width: "40px",
     height: "40px",
-    backgroundColor: "#fff", 
-    borderRadius: "50%", 
+    backgroundColor: "#fff",
+    borderRadius: "50%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     margin: "0 10px",
     boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
     cursor: "pointer",
-    position: "relative", 
+    position: "relative",
   },
   leftSide: {
     display: "flex",
@@ -50,6 +51,10 @@ const useStyles = makeStyles({
     cursor: "pointer",
     color: "#333",
     fontSize: "16px",
+    textDecoration: "none", // Ensure links have no underline
+    "&:hover": {
+      color: "#800080", // Add hover effect
+    },
   },
   rightSide: {
     display: "flex",
@@ -57,18 +62,17 @@ const useStyles = makeStyles({
   },
   icon: {
     fontSize: "20px",
-   
     cursor: "pointer",
     color: "#333",
   },
-totalAmount: {
-  fontWeight: "bold",
-  color: "#800080",
-  fontSize: "18px",
-  marginLeft: "8px", 
-  whiteSpace: "nowrap", 
-  minWidth: "50px",
-}
+  totalAmount: {
+    fontWeight: "bold",
+    color: "#800080",
+    fontSize: "18px",
+    marginLeft: "8px",
+    whiteSpace: "nowrap",
+    minWidth: "50px",
+  },
 });
 
 const NavBar = ({ totalPrice }) => {
@@ -81,10 +85,26 @@ const NavBar = ({ totalPrice }) => {
     <nav className={classes.navbar}>
       <div className={classes.leftSide}>
         <ul className={classes.menu}>
-          <li className={classes.menuItem}>Deals</li>
-          <li className={classes.menuItem}>Shop</li>
-          <li className={classes.menuItem}>Our Contacts</li>
-          <li className={classes.menuItem}>Stores</li>
+          <li>
+            <Link to="/deals" className={classes.menuItem}>
+              Deals
+            </Link>
+          </li>
+          <li>
+            <Link to="/home" className={classes.menuItem}>
+              Shop
+            </Link>
+          </li>
+          <li>
+            <Link to="/contacts" className={classes.menuItem}>
+              Our Contacts
+            </Link>
+          </li>
+          <li>
+            <Link to="/stores" className={classes.menuItem}>
+              Stores
+            </Link>
+          </li>
         </ul>
       </div>
       <div className={classes.rightSide}>
@@ -98,10 +118,10 @@ const NavBar = ({ totalPrice }) => {
           <ShoppingCartIcon className={classes.icon} titleAccess="Cart" />
         </div>
         <div>
-        <span className={classes.totalAmount}>
-        {totalPrice.totalPrice > 0 ? `₹${totalPrice.totalPrice}` : "₹0"}
-        </span>
-      </div>
+          <span className={classes.totalAmount}>
+            {totalPrice.totalPrice > 0 ? `₹${totalPrice.totalPrice}` : "₹0"}
+          </span>
+        </div>
       </div>
     </nav>
   );

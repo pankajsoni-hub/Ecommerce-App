@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const Razorpay = require('razorpay');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const crypto =require('crypto');
 const Cart = require('./models/cart');
 const Order = require('./models/Order'); // Import your Order model
 const sendOrderConfirmation = require('./utils/sendOrderConfirmation'); 
@@ -13,11 +15,14 @@ app.use(bodyParser.json());
 mongoose.connect('mongodb://localhost:27017/shoppingApp', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log('Error connecting to MongoDB:', err));
-
+const razorpay = new Razorpay({
+    key_id: '', // Replace with your Razorpay key ID
+    key_secret: '' // Replace with your Razorpay key secret
+  });
+  
 // Route to add product to cart
 app.post('/api/cart', async (req, res) => {
   const { productId, name, price, description, quantity, image } = req.body;
-
   try {
     const newProduct = new Cart({
       productId,
@@ -88,7 +93,6 @@ app.delete('/api/cart', async (req, res) => {
 });
 app.post('/api/order', async (req, res) => {
   const { name, email, address,products } = req.body;
-
   if (!name || !email || !address) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
@@ -101,7 +105,36 @@ app.post('/api/order', async (req, res) => {
     res.status(500).json({ message: 'Error placing order', error });
   }
 });
+app.post('/create-order', async (req, res) => {
+  const { amount } = req.body;
+  const options = {
+    amount: amount * 100, // Amount in paise (100 paise = 1 INR)
+    currency: 'INR',
+    receipt: 'receipt#1',
+    payment_capture: 1
+  };
+  try {
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+// Route to verify payment signature
+app.post('/verify-signature', (req, res) => {
+  const { order_id, payment_id, signature } = req.body;
+  const body = order_id + '|' + payment_id;
+  const expected_signature = crypto
+    .createHmac('sha256', 'MjIy5Slcn0NJ548HDjkZEblW')
+    .update(body.toString())
+    .digest('hex');
 
+  if (expected_signature === signature) {
+    res.json({ success: true });
+  } else {
+    res.status(400).json({ success: false });
+  }
+});
 // Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

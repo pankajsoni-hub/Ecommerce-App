@@ -3,6 +3,7 @@ import { Box, Typography, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import RazorpayCheckout from "../components/RazorpayCheckout";
 
 // Define styles using makeStyles
 const useStyles = makeStyles(() => ({
@@ -59,10 +60,8 @@ const Checkout = () => {
     email: "",
     address: "",
   });
-  const navigate = useNavigate();
   const location = useLocation();
   const { cartItems } = location.state || { cartItems: [] };
-  const [orderPlaced, setOrderPlaced] = useState(false);
   const classes = useStyles();
 
   // Calculate total price of items in the cart
@@ -70,39 +69,6 @@ const Checkout = () => {
 
   const handleInputChange = (e) => {
     setUserDetails({ ...userDetails, products: cartItems, [e.target.name]: e.target.value });
-  };
-  const handleRemoveAllItems = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/cart", {
-        method: "DELETE",  
-      });
-      const data = await response.json();
-    } catch (error) {
-      console.error("Error removing all items:", error);
-    }
-  };
-  const handleOrder = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...userDetails, totalPrice }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert(`${data.message}`);
-        await handleRemoveAllItems();
-        navigate('/home');
-      } else {
-        alert(`${data.message}`);
-      }
-      if (data.message === "Order placed") {
-        setOrderPlaced(true);
-        
-      }
-    } catch (error) {
-      console.error("Error placing order:", error);
-    }
   };
   return (
     <>
@@ -144,14 +110,7 @@ const Checkout = () => {
             size="small"
             fullWidth
           />
-          <button onClick={handleOrder} className={classes.button}>
-            Place Order
-          </button>
-          {orderPlaced && (
-            <Typography className={classes.alert}>
-              Order placed successfully!
-            </Typography>
-          )}
+          <RazorpayCheckout data={userDetails}totalPrice={totalPrice}/>
         </Box>
       </div>
     </>
