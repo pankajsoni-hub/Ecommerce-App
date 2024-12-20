@@ -16,8 +16,8 @@ mongoose.connect('mongodb://localhost:27017/shoppingApp', { useNewUrlParser: tru
   .then(() => console.log('MongoDB connected'))
   .catch((err) => console.log('Error connecting to MongoDB:', err));
 const razorpay = new Razorpay({
-    key_id: '', // Replace with your Razorpay key ID
-    key_secret: '' // Replace with your Razorpay key secret
+    key_id: 'rzp_test_sViQfriq16A7IA', // Replace with your Razorpay key ID
+    key_secret: 'MjIy5Slcn0NJ548HDjkZEblW' // Replace with your Razorpay key secret
   });
   
 // Route to add product to cart

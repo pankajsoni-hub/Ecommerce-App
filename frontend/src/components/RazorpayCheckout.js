@@ -72,7 +72,7 @@ const RazorpayCheckout = ({ data, totalPrice }) => {
       const order = await createOrder();
 
       const options = {
-        key: '', // Replace with your Razorpay key ID
+        key: 'rzp_test_sViQfriq16A7IA', // Replace with your Razorpay key ID
         amount: order.amount,
         currency: order.currency,
         name: 'abc',
