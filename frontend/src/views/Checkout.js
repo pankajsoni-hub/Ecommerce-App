@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import RazorpayCheckout from "../components/RazorpayCheckout";
 

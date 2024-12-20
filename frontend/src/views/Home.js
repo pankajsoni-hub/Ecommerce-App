@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Box } from '@mui/material';
 import { makeStyles } from "@mui/styles";
 import Slider from "@mui/material/Slider";
 import CardComponent from "../components/Card";
@@ -136,6 +135,7 @@ const formatCategory = (category) => {
 const App = () => {
   const classes = useStyles();
   const [cart, setCart] = useState([]);
+  console.log(cart,"--------cart")
   const [filters, setFilters] = useState({ categories: [], minPrice: 0, maxPrice: 2000 });
   const [priceRange, setPriceRange] = useState([0, 2000]);
   const [appliedFilters, setAppliedFilters] = useState({ categories: [], minPrice: 0, maxPrice: 2000 });
@@ -197,7 +197,7 @@ const App = () => {
         body: JSON.stringify({ image:product.image,productId: product.id, quantity: 1 ,price:product.price,name:product.name}),
       });
 
-      const data = await response.json();
+      await response.json();
       if (response.ok) {
         alert(`${product.name} added to cart and saved to database!`);
       } else {

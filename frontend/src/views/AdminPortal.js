@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import {
   Box,
   Card,
@@ -108,12 +108,13 @@ const AdminPortal = ({ updateTotalAmount }) => {
   const navigate = useNavigate(); 
   const classes = useStyles();
 
-  const calculateTotalPrice = (items) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const calculateTotalPrice = useCallback((items) => {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setTotalPrice(total);
     localStorage.setItem("totalPrice", total);
     if (updateTotalAmount) updateTotalAmount(total);
-  };
+  });
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -128,7 +129,7 @@ const AdminPortal = ({ updateTotalAmount }) => {
     };
 
     fetchCartItems();
-  }, [updateTotalAmount]);
+  }, [calculateTotalPrice, updateTotalAmount]);
   const handleUpdateQuantity = async (id, newQuantity) => {
     if (newQuantity < 1) return;
     try {
@@ -244,14 +245,13 @@ const AdminPortal = ({ updateTotalAmount }) => {
           <Typography className={classes.totalLabel}>Total Amount:</Typography>
           <Typography className={classes.totalValue}>₹{totalPrice}</Typography>
         </Box>
-        <Button
+<Button
   variant="contained"
   color="secondary"
   onClick={() => navigate('/checkout', { state: { cartItems } })}
 >
-  Proceed to Checkout
+Proceed to Checkout
 </Button>
-
 </>
       )}
     </Box>
